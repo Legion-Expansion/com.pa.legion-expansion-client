@@ -1,38 +1,24 @@
-var legionExpansionLoaded;
+var legionLiveGameSelectionLoaded;
 
-if (!legionExpansionLoaded) {
-  legionExpansionLoaded = true;
+if (!legionLiveGameSelectionLoaded) {
+  legionLiveGameSelectionLoaded = true;
 
   function legionLiveGameSelection() {
     try {
-      var themesetting =
+      var themeSetting =
         api.settings.isSet("ui", "legionThemeFunction", true) || "ON";
-      if (themesetting === "ON") {
-        //LOAD CUSTOM LEGION CSS
+      if (themeSetting === "ON") {
         loadCSS(
           "coui://ui/mods/com.pa.legion-expansion/css/legion_selection.css"
         );
 
         model.isLegion = function (type) {
-          if (themesetting === "ON") {
-            var haslegionunit = false;
-            try {
-              if (type.indexOf("/l_") > 2) {
-                haslegionunit = true;
-                return haslegionunit;
-              }
-            } catch (e) {
-              console.log(e);
-              console.log(JSON.stringify(e));
-            }
-
-            return haslegionunit;
-          } else {
-            return false;
+          if (themeSetting === "ON" && type.indexOf("/l_") > 2) {
+            return true;
           }
+          return false;
         };
 
-        //ADD legion class to build_bar_menu
         $(".div_unit_selection").attr(
           "data-bind",
           "css: { legion: model.isLegion($data.type)}, event: { mousedown: function (data, event) { $parent.onSelectionDisplayClick($index(), event) } }"
@@ -40,69 +26,36 @@ if (!legionExpansionLoaded) {
       }
 
       handlers.legionui = function (payload) {
-        console.log("SET UI : " + payload);
-        if (payload === "legion") {
-          $(".body_panel").addClass("legionui");
-
-          var imageSourceForType = function (type) {
-            return (
-              "coui://ui/mods/com.pa.legion-expansion/img/control_group_bar/red/icon_category_" +
-              type.toLowerCase() +
-              ".png"
-            );
-          };
+        require([
+          "coui://ui/mods/com.pa.legion-expansion/common_functions.js",
+        ], function (common) {
+          common.bodyPanelClass(payload);
 
           model.typeArray = ko.computed(function () {
             var group = model.selectionTypeCounts();
 
-            var result = _.compact(
-              _.map(model.types(), function (element) {
-                if (!group[element]) return null;
+            var path =
+              "coui://ui/mods/com.pa.legion-expansion/img/control_group_bar/";
+            var colour = common.uiColour(payload);
 
+            return _.compact(
+              _.map(model.types(), function (element) {
+                if (!group[element]) {
+                  return null;
+                }
                 return {
                   type: element,
                   count: group[element],
-                  source: imageSourceForType(element),
+                  source: common.imageSourceForType(path, colour, element),
                 };
               })
             );
-
-            return result;
           });
-        }
-        if (payload === "mixed") {
-          $(".body_panel").addClass("mixedui");
-
-          imageSourceForType = function (type) {
-            return (
-              "coui://ui/mods/com.pa.legion-expansion/img/control_group_bar/purple/icon_category_" +
-              type.toLowerCase() +
-              ".png"
-            );
-          };
-
-          model.typeArray = ko.computed(function () {
-            var group = model.selectionTypeCounts();
-
-            var result = _.compact(
-              _.map(model.types(), function (element) {
-                if (!group[element]) return null;
-
-                return {
-                  type: element,
-                  count: group[element],
-                  source: imageSourceForType(element),
-                };
-              })
-            );
-
-            return result;
-          });
-        }
+        });
       };
     } catch (e) {
-      console.log(e);
-      console.log(JSON.stringify(e));
+      console.error(e);
+      console.error(JSON.stringify(e));
     }
   }
   legionLiveGameSelection();

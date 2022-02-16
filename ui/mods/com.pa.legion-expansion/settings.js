@@ -1,7 +1,7 @@
-var legionExpansionLoaded;
+var legionSettingsLoaded;
 
-if (!legionExpansionLoaded) {
-  legionExpansionLoaded = true;
+if (!legionSettingsLoaded) {
+  legionSettingsLoaded = true;
 
   function legionSettings() {
     try {
@@ -33,8 +33,8 @@ if (!legionExpansionLoaded) {
         }).responseText
       );
     } catch (e) {
-      console.log(e);
-      console.log(JSON.stringify(e));
+      console.error(e);
+      console.error(JSON.stringify(e));
     }
   }
   legionSettings();

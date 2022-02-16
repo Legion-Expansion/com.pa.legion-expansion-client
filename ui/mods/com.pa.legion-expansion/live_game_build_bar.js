@@ -1,7 +1,7 @@
-var legionExpansionLoaded;
+var legionLiveGameBuildBarLoaded;
 
-if (!legionExpansionLoaded) {
-  legionExpansionLoaded = true;
+if (!legionLiveGameBuildBarLoaded) {
+  legionLiveGameBuildBarLoaded = true;
 
   function legionLiveGameBuildBar() {
     try {
@@ -22,7 +22,9 @@ if (!legionExpansionLoaded) {
 
       ko.computed(function () {
         var buildSet = model.buildSet();
-        if (!buildSet) return;
+        if (!buildSet) {
+          return;
+        }
         var hotkeys = model.hotkeys();
         var groups = buildSet.tabsByGroup();
 
@@ -51,81 +53,75 @@ if (!legionExpansionLoaded) {
           .buildSet()
           .tabs()
           .filter(function (tab) {
-            return tab.visible() && tab.buildGroup() == group;
+            return tab.visible() && tab.buildGroup() === group;
           });
-        if (tabs.length < 1) return;
+        if (tabs.length < 1) {
+          return;
+        }
         group = tabs[0].group();
 
         model.activeBuildGroup(group);
-        if (locked) model.activeBuildGroupLocked(locked);
+        if (locked) {
+          model.activeBuildGroupLocked(locked);
+        }
       };
 
-      var themesetting =
+      var themeSetting =
         api.settings.isSet("ui", "legionThemeFunction", true) || "ON";
-      if (themesetting === "ON") {
-        //LOAD CUSTOM LEGION BUILDBAR CSS
+      if (themeSetting === "ON") {
         loadCSS(
           "coui://ui/mods/com.pa.legion-expansion/css/legion_build_bar.css"
         );
         loadScript("coui://ui/mods/com.pa.legion-expansion/common.js");
 
-        //see global.js
         // eslint-disable-next-line no-undef
-        var legionspecids = legionglobal.builders;
+        var legionSpecIds = legion.builders;
 
-        model.isLegionOrMixedOrVanilla = function (data) {
-          try {
-            var legioncount = 0;
-            var specslength = 0;
-            var selectedspecs = data.buildSet().selectedSpecs();
+        var isLegionOrMixedOrVanilla = function (data) {
+          if (data.buildSet()) {
+            var legionCount = 0;
+            var specsLength = 0;
+            var selectedSpecs = data.buildSet().selectedSpecs();
 
-            _.forOwn(selectedspecs, function (value, key) {
-              if (_.includes(legionspecids, key)) {
-                legioncount++;
+            _.forOwn(selectedSpecs, function (value, key) {
+              if (_.includes(legionSpecIds, key)) {
+                legionCount++;
               }
-              specslength++;
+              specsLength++;
             });
-            if (legioncount == specslength) {
+            if (legionCount === specsLength) {
               return "legion";
+            } else if (legionCount > 0 && legionCount < specsLength) {
+              return "mixed";
             } else {
-              if (legioncount > 0 && legioncount < specslength) {
-                return "mixed";
-              } else {
-                return "vanilla";
-              }
+              return "vanilla";
             }
-          } catch (e) {
-            console.log(e);
-            console.log(JSON.stringify(e));
-            return "";
           }
+          return null;
         };
 
         model.isLegion = function (data) {
-          if (model.isLegionOrMixedOrVanilla(data) === "legion") {
+          if (isLegionOrMixedOrVanilla(data) === "legion") {
             return true;
-          } else {
-            return false;
           }
+          return false;
         };
 
         model.isMixed = function (data) {
-          if (model.isLegionOrMixedOrVanilla(data) === "mixed") {
+          if (isLegionOrMixedOrVanilla(data) === "mixed") {
             return true;
-          } else {
-            return false;
           }
+          return false;
         };
 
-        //ADD legion / mixed ui
         $(".body_panel").attr(
           "data-bind",
           "css: { legion: model.isLegion($data), mixed: model.isMixed($data)}"
         );
       }
     } catch (e) {
-      console.log(e);
-      console.log(JSON.stringify(e));
+      console.error(e);
+      console.error(JSON.stringify(e));
     }
   }
   legionLiveGameBuildBar();

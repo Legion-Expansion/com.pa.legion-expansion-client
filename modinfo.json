@@ -1,22 +1,30 @@
 {
-  "author": "nicb1, Crembels, KillerKiwiJuice, mgmetal13, zx0, Luther, Alpha2546, PRoeleert, wondible, mikeyh, Quitch, Stuart98, dom314, CptConundrum, Elodea, AndreasG, Clopse, Graushwein, N30N, Qzipco, WPMarshall, xankar",
-  "build": "115938",
-  "category": ["titans", "units", "faction"],
-  "context": "client",
-  "date": "2021/08/05",
-  "dependencies": ["com.pa.legion-expansion-server"],
-  "description": "Adds an entirely new faction with over a hundred new units for use in skirmish and multiplayer. Cannot be used in Galactic War.",
-  "display_name": "Legion Expansion Client",
-  "forum": "https://forums.planetaryannihilation.com/threads/rel-legion-expansion-released.71680/",
-  "icon": "https://raw.githubusercontent.com/Legion-Expansion/Legion-Expansion/balance/icon.png",
   "identifier": "com.pa.legion-expansion-client",
+  "context": "client",
+  "version": "1.22.0-115958",
+  "author": "nicb1, Crembels, KillerKiwiJuice, mgmetal13, zx0, Luther, Alpha2546, PRoeleert, wondible, mikeyh, Quitch, Stuart98, dom314, CptConundrum, Elodea, AndreasG, Clopse, Graushwein, N30N, Qzipco, WPMarshall, xankar",
+  "description": "Adds an entirely new faction with over a hundred new units for use in skirmish and multiplayer. Cannot be used in Galactic War.",
+  "category": [
+    "titans",
+    "units",
+    "faction"
+  ],
+  "forum": "https://steamcommunity.com/app/386070/discussions/0/357284767253246444/",
+  "icon": "https://raw.githubusercontent.com/Legion-Expansion/Legion-Expansion/balance/icon.png",
+  "signature": "not yet implemented",
+  "titansOnly": true,
+  "github": "https://github.com/Legion-Expansion/Legion-Expansion",
+  "display_name": "Legion Expansion Client",
+  "dependencies": [
+    "com.pa.legion-expansion-server"
+  ],
   "scenes": {
-    "server_browser": [
-      "coui://ui/mods/com.pa.legion-expansion/server_browser.js"
+    "settings": [
+      "coui://ui/mods/com.pa.legion-expansion/settings.js"
     ],
-    "load_planet": ["coui://ui/mods/com.pa.legion-expansion/load_planet.js"],
-    "settings": ["coui://ui/mods/com.pa.legion-expansion/settings.js"],
-    "shared_build": ["coui://ui/mods/com.pa.legion-expansion/shared_build.js"],
+    "shared_build": [
+      "coui://ui/mods/com.pa.legion-expansion/shared_build.js"
+    ],
     "live_game_players": [
       "coui://ui/mods/com.pa.legion-expansion/live_game_players.js"
     ],
@@ -53,13 +61,14 @@
     "live_game_menu": [
       "coui://ui/mods/com.pa.legion-expansion/live_game_menu.js"
     ],
-    "new_game": ["coui://ui/mods/com.pa.legion-expansion/new_game.js"],
-    "start": ["coui://ui/mods/com.pa.legion-expansion/start.js"]
+    "new_game": [
+      "coui://ui/mods/com.pa.legion-expansion/new_game.js"
+    ],
+    "start": [
+      "coui://ui/mods/com.pa.legion-expansion/start.js"
+    ]
   },
-  "priority": 100,
-  "signature": "(not yet implemented)",
-  "version": "1.21.0",
-  "titansOnly": true,
   "hidden": true,
-  "github": "https://github.com/Legion-Expansion/Legion-Expansion"
+  "build": "115958",
+  "date": "2022-02-16"
 }

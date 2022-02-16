@@ -1,62 +1,46 @@
-var legionExpansionLoaded;
+var legionLiveGamePlanetsLoaded;
 
-if (!legionExpansionLoaded) {
-  legionExpansionLoaded = true;
+if (!legionLiveGamePlanetsLoaded) {
+  legionLiveGamePlanetsLoaded = true;
 
   function legionLiveGamePlanets() {
     try {
-      var themesetting =
+      var themeSetting =
         api.settings.isSet("ui", "legionThemeFunction", true) || "ON";
-      if (themesetting === "ON") {
+      if (themeSetting === "ON") {
         loadCSS(
           "coui://ui/mods/com.pa.legion-expansion/css/legion_planets.css"
         );
       }
 
       handlers.legionui = function (payload) {
-        console.log("SET UI : " + payload);
-        if (payload === "legion") {
-          $(".body_panel").addClass("legionui");
+        require([
+          "coui://ui/mods/com.pa.legion-expansion/common_functions.js",
+        ], function (common) {
+          common.bodyPanelClass(payload);
+
+          var src = "img[src='coui://ui/main/shared/img/controls/";
+          var path = "coui://ui/mods/com.pa.legion-expansion/img/controls/";
+          var colour = common.uiColour(payload);
+          var png1 = "pin_open.png";
+          var png2 = "pin_closed.png";
+
+          common.toggleImage(src, path, colour, png1, png2);
 
           model.toggleImage = ko.computed(function () {
-            return model.showCelestialViewModels()
-              ? "coui://ui/mods/com.pa.legion-expansion/img/controls/red/pin_open.png"
-              : "coui://ui/mods/com.pa.legion-expansion/img/controls/red/pin_closed.png";
+            return common.togglePanel(
+              model.showCelestialViewModels(),
+              path,
+              colour,
+              png1,
+              png2
+            );
           });
-          $('img[src="coui://ui/main/shared/img/controls/pin_open.png"]').attr(
-            "src",
-            "coui://ui/mods/com.pa.legion-expansion/img/controls/red/pin_open.png"
-          );
-          $(
-            'img[src="coui://ui/main/shared/img/controls/pin_closed.png"]'
-          ).attr(
-            "src",
-            "coui://ui/mods/com.pa.legion-expansion/img/controls/red/pin_closed.png"
-          );
-        }
-        if (payload === "mixed") {
-          $(".body_panel").addClass("mixedui");
-
-          model.toggleImage = ko.computed(function () {
-            return model.showCelestialViewModels()
-              ? "coui://ui/mods/com.pa.legion-expansion/img/controls/purple/pin_open.png"
-              : "coui://ui/mods/com.pa.legion-expansion/img/controls/purple/pin_closed.png";
-          });
-          $('img[src="coui://ui/main/shared/img/controls/pin_open.png"]').attr(
-            "src",
-            "coui://ui/mods/com.pa.legion-expansion/img/controls/purple/pin_open.png"
-          );
-          $(
-            'img[src="coui://ui/main/shared/img/controls/pin_closed.png"]'
-          ).attr(
-            "src",
-            "coui://ui/mods/com.pa.legion-expansion/img/controls/purple/pin_closed.png"
-          );
-        }
+        });
       };
     } catch (e) {
-      console.log(e);
-      console.log(JSON.stringify(e));
+      console.error(e);
+      console.error(JSON.stringify(e));
     }
   }
   legionLiveGamePlanets();

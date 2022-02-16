@@ -1,7 +1,7 @@
-var legionExpansionLoaded;
+var legionNewGameLoaded;
 
-if (!legionExpansionLoaded) {
-  legionExpansionLoaded = true;
+if (!legionNewGameLoaded) {
+  legionNewGameLoaded = true;
 
   function legionNewGame() {
     try {
@@ -37,8 +37,9 @@ if (!legionExpansionLoaded) {
         };
 
         model.legionUrlClicked = function (data, event) {
-          if (_.has(event, "target.href"))
+          if (_.has(event, "target.href")) {
             model.legionOpenUrl(event.target.href);
+          }
         };
 
         model.legionOpenUrl = function (url) {
@@ -72,24 +73,24 @@ if (!legionExpansionLoaded) {
           var legionClientLoaded =
             _.intersection(_.pluck(mods, "identifier"), [
               "com.pa.legion-expansion-client",
-              "com.pa.legion-expansion-client-master",
-              "com.pa.legion-expansion-client-balance",
               "com.pa.legion-expansion-client-dev",
             ]).length > 0;
 
           model.legionClientModLoaded(legionClientLoaded);
 
           if (!legionClientLoaded) {
-            if (model.registerHoldReady)
+            if (model.registerHoldReady) {
               model.registerHoldReady(
                 "com.pa.legion-expansion-client",
                 "Legion Client Mod Missing"
               );
-            if (model.localChatMessage)
+            }
+            if (model.localChatMessage) {
               model.localChatMessage(
                 "Legion Expansion",
                 "Legion Expansion client mod is not installed!"
               );
+            }
           }
 
           if (!model.legionDoNotShowWelcome() && !model.returnFromLoad()) {
@@ -100,44 +101,32 @@ if (!legionExpansionLoaded) {
         loadScript("coui://ui/mods/com.pa.legion-expansion/common.js");
 
         // eslint-disable-next-line no-undef
-        var legioncommanders = legionglobal.commanders;
+        var legionCommanders = legion.commanders;
 
-        model.isNotLegion = function (commander, isEmpty) {
-          if (!isEmpty) {
-            return !_.includes(legioncommanders, commander);
-          } else {
-            return true;
-          }
-        };
-
-        model.isMLA = function (commander, isEmpty) {
-          if (!isEmpty) {
-            return !_.includes(legioncommanders, commander);
-          }
+        model.isLegion = function (commander) {
+          return _.includes(legionCommanders, commander);
         };
 
         //Style Commander Picker Legion
         $("#commander-picker .div-commander-picker-item.btn_std_ix").attr(
           "data-bind",
-          "css: {legioncommander: !model.isNotLegion($data)}, click: function () { model.setCommander($index()) }, click_sound: 'default', rollover_sound: 'default'"
+          "css: {legioncommander: model.isLegion($data)}, click: function () { model.setCommander($index()) }, click_sound: 'default', rollover_sound: 'default'"
         );
         $("#ai-commander-picker .div-commander-picker-item.btn_std_ix").attr(
           "data-bind",
-          "css: {legioncommander: !model.isNotLegion($data)}, click: function () { model.setAICommander(model.selectedAI(), $data) }, click_sound: 'default', rollover_sound: 'default'"
+          "css: {legioncommander: model.isLegion($data)}, click: function () { model.setAICommander(model.selectedAI(), $data) }, click_sound: 'default', rollover_sound: 'default'"
         );
 
         //Style Slot Legion
         $(".slot-player").attr(
           "data-bind",
-          "css: {legionslot: !model.isNotLegion($data.commander(),$data.isEmpty()), mlaslot: model.isMLA($data.commander(),$data.isEmpty()), ready: isReady, loading: isLoading}"
+          "css: {legionslot: !$data.isEmpty() && model.isLegion($data.commander()), mlaslot: !$data.isEmpty() && !model.isLegion($data.commander()), ready: isReady, loading: isLoading}"
         );
       };
 
       if (
         _.intersection(model.gameModIdentifiers(), [
           "com.pa.legion-expansion-server",
-          "com.pa.legion-expansion-server-master",
-          "com.pa.legion-expansion-server-balance",
           "com.pa.legion-expansion-server-dev",
         ]).length > 0
       ) {
@@ -152,6 +141,7 @@ if (!legionExpansionLoaded) {
       });
     } catch (e) {
       console.error(e);
+      console.error(JSON.stringify(e));
     }
   }
   legionNewGame();

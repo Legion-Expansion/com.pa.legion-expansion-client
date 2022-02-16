@@ -1,27 +1,26 @@
-var legionExpansionLoaded;
+var legionLiveGameMenuLoaded;
 
-if (!legionExpansionLoaded) {
-  legionExpansionLoaded = true;
+if (!legionLiveGameMenuLoaded) {
+  legionLiveGameMenuLoaded = true;
 
   function legionLiveGameMenu() {
     try {
-      var themesetting =
+      var themeSetting =
         api.settings.isSet("ui", "legionThemeFunction", true) || "ON";
-      if (themesetting === "ON") {
+      if (themeSetting === "ON") {
         loadCSS("coui://ui/mods/com.pa.legion-expansion/css/legion_menu.css");
+
+        handlers.legionui = function (payload) {
+          require([
+            "coui://ui/mods/com.pa.legion-expansion/common_functions.js",
+          ], function (common) {
+            common.bodyPanelClass(payload);
+          });
+        };
       }
-      handlers.legionui = function (payload) {
-        console.log("SET UI : " + payload);
-        if (payload === "legion") {
-          $(".body_panel").addClass("legionui");
-        }
-        if (payload === "mixed") {
-          $(".body_panel").addClass("mixedui");
-        }
-      };
     } catch (e) {
-      console.log(e);
-      console.log(JSON.stringify(e));
+      console.error(e);
+      console.error(JSON.stringify(e));
     }
   }
   legionLiveGameMenu();

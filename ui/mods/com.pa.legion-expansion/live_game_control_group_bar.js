@@ -1,130 +1,46 @@
-var legionExpansionLoaded;
+var legionLiveGameControlGroupLoaded;
 
-if (!legionExpansionLoaded) {
-  legionExpansionLoaded = true;
+if (!legionLiveGameControlGroupLoaded) {
+  legionLiveGameControlGroupLoaded = true;
 
   function legionLiveGameControlGroup() {
     try {
-      var themesetting =
+      var themeSetting =
         api.settings.isSet("ui", "legionThemeFunction", true) || "ON";
-      if (themesetting === "ON") {
+      if (themeSetting === "ON") {
         loadCSS(
           "coui://ui/mods/com.pa.legion-expansion/css/legion_control_group_bar.css"
         );
       }
 
       handlers.legionui = function (payload) {
-        console.log("SET UI : " + payload);
-        if (payload === "legion") {
-          $(".body_panel").addClass("legionui");
+        require([
+          "coui://ui/mods/com.pa.legion-expansion/common_functions.js",
+        ], function (common) {
+          common.bodyPanelClass(payload);
+
+          var src =
+            "img[src='coui://ui/main/game/live_game/img/control_group_bar/";
+          var path =
+            "coui://ui/mods/com.pa.legion-expansion/img/control_group_bar/";
+          var colour = common.uiColour(payload);
 
           model.imageSourceForType = function (type) {
-            return (
-              "coui://ui/mods/com.pa.legion-expansion/img/control_group_bar/red/icon_category_" +
-              type.toLowerCase() +
-              ".png"
-            );
+            return common.imageSourceForType(path, colour, type);
           };
-          $(
-            'img[src="coui://ui/main/game/live_game/img/control_group_bar/icon_category_bot.png"]'
-          ).attr(
-            "src",
-            "coui://ui/mods/com.pa.legion-expansion/img/control_group_bar/red/icon_category_bot.png"
-          );
-          $(
-            'img[src="coui://ui/main/game/live_game/img/control_group_bar/icon_category_tank.png"]'
-          ).attr(
-            "src",
-            "coui://ui/mods/com.pa.legion-expansion/img/control_group_bar/red/icon_category_tank.png"
-          );
-          $(
-            'img[src="coui://ui/main/game/live_game/img/control_group_bar/icon_category_air.png"]'
-          ).attr(
-            "src",
-            "coui://ui/mods/com.pa.legion-expansion/img/control_group_bar/red/icon_category_air.png"
-          );
-          $(
-            'img[src="coui://ui/main/game/live_game/img/control_group_bar/icon_category_naval.png"]'
-          ).attr(
-            "src",
-            "coui://ui/mods/com.pa.legion-expansion/img/control_group_bar/red/icon_category_naval.png"
-          );
-          $(
-            'img[src="coui://ui/main/game/live_game/img/control_group_bar/icon_category_orbital.png"]'
-          ).attr(
-            "src",
-            "coui://ui/mods/com.pa.legion-expansion/img/control_group_bar/red/icon_category_orbital.png"
-          );
-          $(
-            'img[src="coui://ui/main/game/live_game/img/control_group_bar/icon_category_advanced.png"]'
-          ).attr(
-            "src",
-            "coui://ui/mods/com.pa.legion-expansion/img/control_group_bar/red/icon_category_advanced.png"
-          );
-          $(
-            'img[src="coui://ui/main/game/live_game/img/control_group_bar/icon_category_fabber.png"]'
-          ).attr(
-            "src",
-            "coui://ui/mods/com.pa.legion-expansion/img/control_group_bar/red/icon_category_fabber.png"
-          );
-        }
-        if (payload === "mixed") {
-          $(".body_panel").addClass("mixedui");
 
-          model.imageSourceForType = function (type) {
-            return (
-              "coui://ui/mods/com.pa.legion-expansion/img/control_group_bar/purple/icon_category_" +
-              type.toLowerCase() +
-              ".png"
-            );
-          };
-          $(
-            'img[src="coui://ui/main/game/live_game/img/control_group_bar/icon_category_bot.png"]'
-          ).attr(
-            "src",
-            "coui://ui/mods/com.pa.legion-expansion/img/control_group_bar/purple/icon_category_bot.png"
-          );
-          $(
-            'img[src="coui://ui/main/game/live_game/img/control_group_bar/icon_category_tank.png"]'
-          ).attr(
-            "src",
-            "coui://ui/mods/com.pa.legion-expansion/img/control_group_bar/purple/icon_category_tank.png"
-          );
-          $(
-            'img[src="coui://ui/main/game/live_game/img/control_group_bar/icon_category_air.png"]'
-          ).attr(
-            "src",
-            "coui://ui/mods/com.pa.legion-expansion/img/control_group_bar/purple/icon_category_air.png"
-          );
-          $(
-            'img[src="coui://ui/main/game/live_game/img/control_group_bar/icon_category_naval.png"]'
-          ).attr(
-            "src",
-            "coui://ui/mods/com.pa.legion-expansion/img/control_group_bar/purple/icon_category_naval.png"
-          );
-          $(
-            'img[src="coui://ui/main/game/live_game/img/control_group_bar/icon_category_orbital.png"]'
-          ).attr(
-            "src",
-            "coui://ui/mods/com.pa.legion-expansion/img/control_group_bar/purple/icon_category_orbital.png"
-          );
-          $(
-            'img[src="coui://ui/main/game/live_game/img/control_group_bar/icon_category_advanced.png"]'
-          ).attr(
-            "src",
-            "coui://ui/mods/com.pa.legion-expansion/img/control_group_bar/purple/icon_category_advanced.png"
-          );
-          $(
-            'img[src="coui://ui/main/game/live_game/img/control_group_bar/icon_category_fabber.png"]'
-          ).attr(
-            "src",
-            "coui://ui/mods/com.pa.legion-expansion/img/control_group_bar/purple/icon_category_fabber.png"
-          );
-        }
+          common.toggleImage(src, path, colour, "icon_category_bot.png");
+          common.toggleImage(src, path, colour, "icon_category_tank.png");
+          common.toggleImage(src, path, colour, "icon_category_air.png");
+          common.toggleImage(src, path, colour, "icon_category_naval.png");
+          common.toggleImage(src, path, colour, "icon_category_orbital.png");
+          common.toggleImage(src, path, colour, "icon_category_advanced.png");
+          common.toggleImage(src, path, colour, "icon_category_fabber.png");
+        });
       };
     } catch (e) {
-      console.log(e);
-      console.log(JSON.stringify(e));
+      console.error(e);
+      console.error(JSON.stringify(e));
     }
   }
   legionLiveGameControlGroup();
