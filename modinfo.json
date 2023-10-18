@@ -1,7 +1,7 @@
 {
   "identifier": "com.pa.legion-expansion-client",
   "context": "client",
-  "version": "1.28.0-116982",
+  "version": "1.29.0-116982",
   "author": "nicb1, Crembels, KillerKiwiJuice, mgmetal13, zx0, Luther, Alpha2546, PRoeleert, wondible, mikeyh, Quitch, Stuart98, dom314, CptConundrum, Elodea, AndreasG, Clopse, Graushwein, N30N, Qzipco, WPMarshall, xankar",
   "description": "Adds an entirely new faction with over a hundred new units for use in skirmish and multiplayer. Cannot be used in Galactic War.",
   "category": [
@@ -70,5 +70,5 @@
   },
   "hidden": true,
   "build": "116982",
-  "date": "2023-06-12"
+  "date": "2023-10-18"
 }
